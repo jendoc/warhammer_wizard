@@ -1,0 +1,33 @@
+.header {
+    background: url(../../assets/cover.jpg) center/cover no-repeat;
+    min-height: 50vh;
+}
+
+.header__overlay {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: #00000090;
+    position: relative;
+    width: 100vw;
+    height: 50vh;
+}
+
+.header__title {
+    margin: 0 auto;
+    color: #f9f3d9;
+}
+
+.header__description {
+    margin: 0 auto;
+    color: #f9f3d9;
+}
+
+
+.battle {
+  display: flex;
+  flex-direction: column;
+  margin: 10px auto;
+  justify-content: center;
+  max-width: fit-content;
+}
