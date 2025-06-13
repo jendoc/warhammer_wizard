@@ -7,6 +7,7 @@ import {
     StepContent,
     Typography,
     Paper,
+    Tooltip,
 } from '@mui/material';
 import { Link } from 'react-router';
 import InfoOutlineIcon from '@mui/icons-material/InfoOutline';
@@ -19,6 +20,26 @@ function Battle() {
     const [roundCount, setRoundCount] = React.useState(1);
     const [player1Vp, setPlayer1Vp] = React.useState(0);
     const [player2Vp, setPlayer2Vp] = React.useState(0);
+    const getUnderdogMessage = (vp1: number, vp2: number) => {
+        if (vp1 < vp2) return 'Underdog: Player 1';
+        if (vp2 < vp1) return 'Underdog: Player 2';
+        return 'No underdog — the players are tied.';
+    };
+    const getUnderdogEmoji = (player: 1 | 2) => {
+        if (player1Vp === player2Vp) return null; // No underdog
+
+        const isUnderdog =
+            player === 1 ? player1Vp < player2Vp : player2Vp < player1Vp;
+
+        return isUnderdog ? (
+            <Tooltip arrow title='Underdog – fewer victory points this round'>
+                <span role='img' aria-label='underdog'>
+                    {' '}
+                    🐶
+                </span>
+            </Tooltip>
+        ) : null;
+    };
 
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -49,10 +70,15 @@ function Battle() {
 
                     <Paper
                         elevation={2}
-                        style={{
-                            fontSize: '10px',
-                            padding: '5px',
-                            margin: '5px',
+                        sx={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                columnGap: '5px',
+                                fontSize: '10px',
+                                padding: '5px',
+                                margin: '5px',
+                                maxWidth: 'fit-content',
+                                backgroundColor: '#F8D882cc'
                         }}
                     >
                         <InfoOutlineIcon
@@ -68,6 +94,24 @@ function Battle() {
                         player has the fewest victory points it the underdog for
                         the battle round. If the players are tied, there is no
                         underdog.
+                        <Paper
+                            elevation={2}
+                            sx={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                columnGap: '5px',
+                                fontSize: '10px',
+                                padding: '5px',
+                                margin: '5px',
+                                maxWidth: 'fit-content',
+                                backgroundColor: '#F8D882cc'
+                            }}
+                        >
+                            <InfoOutlineIcon
+                                style={{ height: '10px', width: '10px' }}
+                            />{' '}
+                            {getUnderdogMessage(player1Vp, player2Vp)}
+                        </Paper>
                     </Typography>
 
                     <Typography component='div'>
@@ -91,6 +135,24 @@ function Battle() {
                         the battle round. If the players are tied{' '}
                         <i>(as they are now in the first round)</i>, there is no
                         underdog.
+                        <Paper
+                            elevation={2}
+                            sx={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                columnGap: '5px',
+                                fontSize: '10px',
+                                padding: '5px',
+                                margin: '5px',
+                                maxWidth: 'fit-content',
+                                backgroundColor: '#F8D882cc'
+                            }}
+                        >
+                            <InfoOutlineIcon
+                                style={{ height: '10px', width: '10px' }}
+                            />{' '}
+                            {getUnderdogMessage(player1Vp, player2Vp)}
+                        </Paper>
                     </Typography>
                     <Typography component='div'>
                         3. <strong> Start of Round Abilites</strong> The active
@@ -151,13 +213,24 @@ function Battle() {
     const scrollToRef = useRef(null);
 
     return (
-        <>
-            <Box style={{ backgroundColor: '#fff', padding: '10px' }}>
+        <div className='battle'>
+            <Box
+                style={{
+                    backgroundColor: '#ffffffe6',
+                    padding: '10px',
+                    borderRadius: '10px',
+                    margin: '0 10px',
+                }}
+            >
                 <Typography variant='h6'>🔥 FIRE AND JADE BATTLE 🐲</Typography>
-                <Box sx={{ display: 'flex', justifyContent:'space-around' }}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-around' }}>
                     <p>ROUND {roundCount}</p>
-                    <p>Player 1 VP: {player1Vp}</p>
-                    <p>Player 2 VP: {player2Vp}</p>
+                    <p>
+                        Player 1 VP: {player1Vp} {getUnderdogEmoji(1)}
+                    </p>
+                    <p>
+                        Player 2 VP: {player2Vp} {getUnderdogEmoji(2)}
+                    </p>
                 </Box>
                 <Link to='/'> Return Home</Link>
                 <Stepper activeStep={activeStep} orientation='vertical'>
@@ -168,7 +241,19 @@ function Battle() {
                                 {roundCount === 1 && activeStep === 0
                                     ? step.round1Description
                                     : step.description}
-                                    <Button onClick={() => scrollToRef?.current.scrollIntoView()}>See actions</Button>
+                                {index === 0 && (
+                                    <Typography
+                                        sx={{ mt: 2 }}
+                                        color='secondary'
+                                    ></Typography>
+                                )}
+                                <Button
+                                    onClick={() =>
+                                        scrollToRef?.current.scrollIntoView()
+                                    }
+                                >
+                                    See actions
+                                </Button>
                                 <Box sx={{ mb: 2 }}>
                                     <Button
                                         variant='contained'
@@ -191,41 +276,82 @@ function Battle() {
                         </Step>
                     ))}
                 </Stepper>
-                {activeStep === steps.length && roundCount !== 4 && (
-                    <Paper square elevation={0} sx={{ p: 3 }}>
-                        <Typography>Round complete!</Typography>
-                        <Button onClick={() => setPlayer1Vp(player1Vp + 1)}>
-                            Player 1 +
-                        </Button>
-                        <Button onClick={() => setPlayer2Vp(player2Vp + 1)}>
-                            Player 2 +
-                        </Button>
-                        <Button
-                            variant='outlined'
-                            sx={{ mt: 1, mr: 1 }}
-                            onClick={() => {
-                                handleReset();
-                                setRoundCount(roundCount + 1);
-                            }}
-                        >
-                            Next round
-                        </Button>
-                    </Paper>
-                )}{' '}
-                {activeStep === steps.length && roundCount === 4 && (
-                    <Paper elevation={2}>
-                        <h6>BATTLE COMPLETE</h6>
-                        <p>
-                            WINNER:{' '}
-                            {player1Vp > player2Vp ? 'PLAYER 1' : 'PLAYER 2'}
-                        </p>
+                {activeStep === steps.length && (
+                    <Paper
+                        elevation={2}
+                        sx={{
+                            p: 3,
+                            borderRadius: '10px',
+                            marginTop: '10px',
+                            width: '80vw',
+                        }}
+                    >
+                        {roundCount !== 4 ? (
+                            <>
+                                <Typography>Round complete!</Typography>
+                                <div style={{ display: 'flex' }}>
+                                    <Button
+                                        onClick={() =>
+                                            setPlayer1Vp(player1Vp + 1)
+                                        }
+                                    >
+                                        Player 1 +
+                                    </Button>
+                                    <Button
+                                        onClick={() =>
+                                            setPlayer2Vp(player2Vp + 1)
+                                        }
+                                    >
+                                        Player 2 +
+                                    </Button>
+                                    <Button
+                                        variant='outlined'
+                                        sx={{ mt: 1, mr: 1, ml: 'auto' }}
+                                        onClick={() => {
+                                            handleReset();
+                                            setRoundCount(roundCount + 1);
+                                        }}
+                                    >
+                                        Next round
+                                    </Button>
+                                </div>
+                            </>
+                        ) : (
+                            <>
+                                <Typography variant='h6'>
+                                    BATTLE COMPLETE
+                                </Typography>
+                                <Typography>
+                                    {player1Vp === player2Vp
+                                        ? 'The game is a TIE! 🫱🏿‍🫲🏽'
+                                        : `WINNER: ${
+                                              player1Vp > player2Vp
+                                                  ? 'PLAYER 1 💪'
+                                                  : 'PLAYER 2 💪'
+                                          }`}
+                                </Typography>
+                            </>
+                        )}
                     </Paper>
                 )}
             </Box>
-            <section className='battle__actions' id='battle__actions' ref={scrollToRef}>
-                <Actions phase={activeStep}/>
+            <section
+                className='battle__actions'
+                id='battle__actions'
+                ref={scrollToRef}
+                style={{
+                    marginTop: '10px',
+                    marginBottom: '30px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    color: '#fff',
+                    rowGap: '10px',
+                }}
+            >
+                <Actions phase={activeStep} />
             </section>
-        </>
+        </div>
     );
 }
 

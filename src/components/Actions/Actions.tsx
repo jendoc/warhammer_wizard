@@ -9,6 +9,7 @@ import {
     DoneOutline,
     AutoAwesome,
 } from '@mui/icons-material';
+import { Typography } from '@mui/material';
 import actions from '../../data/actions';
 
 interface Action {
@@ -48,6 +49,7 @@ function Actions({ phase }: { phase: number }) {
 
     return (
         <>
+            {<Typography>ACTIONS & COMMANDS</Typography>}
             {actionList.map((action: Action, index: number) => (
                 <ActionCard
                     key={index}
