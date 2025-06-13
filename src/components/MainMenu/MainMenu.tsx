@@ -26,12 +26,12 @@ function MainMenu() {
                     ⚔️ Start Battle
                     </Link>
                 </Button>
-                <Button
+                {/* <Button
                     className='battle__button'
                     style={{ color: '#BFD1E5', marginTop: '10px' }}
                 >
                     ⚙️ Configure Armies
-                </Button>
+                </Button> */}
             </section>
         </>
     );
