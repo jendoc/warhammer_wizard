@@ -33,7 +33,7 @@ function ActionCard({
                     title={phase}
                     avatar={icon}
                     action={
-                        <IconButton aria-label='expand' size='small'>
+                        <IconButton aria-label='expand' size='small' sx={{color: '#fff'}}>
                             {open ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
                         </IconButton>
                     }

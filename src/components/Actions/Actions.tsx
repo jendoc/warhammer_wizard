@@ -7,7 +7,7 @@ import {
     DirectionsRun,
     LocalFireDepartment,
     DoneOutline,
-    AutoAwesome
+    AutoAwesome,
 } from '@mui/icons-material';
 import actions from '../../data/actions';
 
@@ -29,14 +29,14 @@ function Actions({ phase }: { phase: number }) {
     };
 
     const phaseIconMap: Record<number, React.ReactNode> = {
-    0: <OutlinedFlag />,
-    1: <Security />,
-    2: <OpenInFull />,
-    3: <Moving />,
-    4: <DirectionsRun />,
-    5: <LocalFireDepartment />,
-    6: <DoneOutline />,
-};
+        0: <OutlinedFlag />,
+        1: <Security />,
+        2: <OpenInFull />,
+        3: <Moving />,
+        4: <DirectionsRun />,
+        5: <LocalFireDepartment />,
+        6: <DoneOutline />,
+    };
 
     const current = phaseMap[phase] || { name: '', color: '#fff' };
     const actionList = actions[current.name];
