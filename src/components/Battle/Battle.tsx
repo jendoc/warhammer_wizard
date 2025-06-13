@@ -16,6 +16,7 @@ import React, { useRef } from 'react';
 import Actions from '../Actions/Actions';
 
 function Battle() {
+    const [battleComplete, setBattleComplete] = React.useState(false);
     const [activeStep, setActiveStep] = React.useState(0);
     const [roundCount, setRoundCount] = React.useState(1);
     const [player1Vp, setPlayer1Vp] = React.useState(0);
@@ -50,7 +51,12 @@ function Battle() {
     };
 
     const handleReset = () => {
-        setActiveStep(0);
+        if (roundCount === 4) {
+            setBattleComplete(true);
+        } else {
+            setRoundCount((prev) => prev + 1);
+            setActiveStep(0);
+        }
     };
 
     const steps = [
@@ -71,14 +77,14 @@ function Battle() {
                     <Paper
                         elevation={2}
                         sx={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                columnGap: '5px',
-                                fontSize: '10px',
-                                padding: '5px',
-                                margin: '5px',
-                                maxWidth: 'fit-content',
-                                backgroundColor: '#F8D882cc'
+                            display: 'flex',
+                            alignItems: 'center',
+                            columnGap: '5px',
+                            fontSize: '10px',
+                            padding: '5px',
+                            margin: '5px',
+                            maxWidth: 'fit-content',
+                            backgroundColor: '#F8D882cc',
                         }}
                     >
                         <InfoOutlineIcon
@@ -104,7 +110,7 @@ function Battle() {
                                 padding: '5px',
                                 margin: '5px',
                                 maxWidth: 'fit-content',
-                                backgroundColor: '#F8D882cc'
+                                backgroundColor: '#F8D882cc',
                             }}
                         >
                             <InfoOutlineIcon
@@ -115,9 +121,8 @@ function Battle() {
                     </Typography>
 
                     <Typography component='div'>
-                        2. <strong> Start of Round Abilites</strong> The active
-                        player can use any Start of Battle Round abilities
-                        first, then their opponent can do the same.
+                        2. <strong> Start of Turn Abilites</strong> The active
+                        player can use a Start of Turn ability.
                     </Typography>
                 </>
             ),
@@ -145,7 +150,7 @@ function Battle() {
                                 padding: '5px',
                                 margin: '5px',
                                 maxWidth: 'fit-content',
-                                backgroundColor: '#F8D882cc'
+                                backgroundColor: '#F8D882cc',
                             }}
                         >
                             <InfoOutlineIcon
@@ -155,29 +160,40 @@ function Battle() {
                         </Paper>
                     </Typography>
                     <Typography component='div'>
-                        3. <strong> Start of Round Abilites</strong> The active
-                        player can use any Start of Battle Round abilities
-                        first, then their opponent can do the same.
+                        3. <strong> Start of Turn Abilites</strong> The active
+                        player can use a Start of Turn ability.
                     </Typography>
                 </>
             ),
         },
         {
             label: 'Hero Phase',
-            description: (
-                <>
-                    Starting with the active player, use any HERO PHASE
-                    abilities. Their opponent then does the same.
-                </>
-            ),
+            description: <>The active player performs 1 HERO ability.</>,
         },
         {
             label: 'Movement Phase',
             description: (
                 <>
-                    Starting with the active player, MOVE your units as
-                    described on their warscrolls. Retreat Run Their opponent
-                    then does the same.
+                    The active player performs 1 MOVE ability.
+                    <Paper
+                        elevation={2}
+                        sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            columnGap: '5px',
+                            fontSize: '10px',
+                            padding: '5px',
+                            margin: '5px',
+                            maxWidth: 'fit-content',
+                            backgroundColor: '#F8D882cc',
+                        }}
+                    >
+                        <InfoOutlineIcon
+                            style={{ height: '10px', width: '10px' }}
+                        />{' '}
+                        Remember that you may not end your regular move action
+                        in your oponent's combat range.
+                    </Paper>
                 </>
             ),
         },
@@ -185,28 +201,53 @@ function Battle() {
             label: 'Shooting Phase',
             description: (
                 <>
-                    Starting with the active player, SHOOT with your units as
-                    described on their warscrolls. Their opponent then does the
-                    same.
+                    The active player performs 1 SHOOTING ability. The
+                    non-active player may only counter.
                 </>
             ),
         },
         {
             label: 'Charge Phase',
-            description: <>Use CHARGE abilites</>,
+            description: (
+                <>
+                    The active player performs 1 CHARGE ability. The non-active
+                    player may only counter.
+                </>
+            ),
         },
         {
             label: 'Combat Phase',
             description: (
                 <>
-                    Use COMBAT abilites Units are considers to be IN COMBAT if
-                    they are within 3" of eachother.
+                    The active player performs 1 COMBAT ability. The non-active
+                    player may only counter.{' '}
+                    <Paper
+                        elevation={2}
+                        sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            columnGap: '5px',
+                            fontSize: '10px',
+                            padding: '5px',
+                            margin: '5px',
+                            maxWidth: 'fit-content',
+                            backgroundColor: '#F8D882cc',
+                        }}
+                    >
+                        <InfoOutlineIcon
+                            style={{ height: '10px', width: '10px' }}
+                        />{' '}
+                        Units are considered to be in combat range if they are
+                        within 3" of eachother.
+                    </Paper>
                 </>
             ),
         },
         {
             label: 'End of Turn',
-            description: <></>,
+            description: (
+                <>The active player may perform an END OF TURN ability.</>
+            ),
         },
     ];
 
@@ -252,7 +293,7 @@ function Battle() {
                                         scrollToRef?.current.scrollIntoView()
                                     }
                                 >
-                                    See actions
+                                    See abilites
                                 </Button>
                                 <Box sx={{ mb: 2 }}>
                                     <Button
@@ -286,9 +327,26 @@ function Battle() {
                             width: '80vw',
                         }}
                     >
-                        {roundCount !== 4 ? (
+                        {battleComplete ? (
                             <>
-                                <Typography>Round complete!</Typography>
+                                <Typography variant='h6'>
+                                    BATTLE COMPLETE
+                                </Typography>
+                                <Typography>
+                                    {player1Vp === player2Vp
+                                        ? 'The game is a TIE! 🫱🏿‍🫲🏽'
+                                        : `WINNER: ${
+                                              player1Vp > player2Vp
+                                                  ? 'PLAYER 1 💪'
+                                                  : 'PLAYER 2 💪'
+                                          }`}
+                                </Typography>
+                            </>
+                        ) : (
+                            <>
+                                <Typography>
+                                    Round {roundCount} complete!
+                                </Typography>
                                 <div style={{ display: 'flex' }}>
                                     <Button
                                         onClick={() =>
@@ -307,29 +365,13 @@ function Battle() {
                                     <Button
                                         variant='outlined'
                                         sx={{ mt: 1, mr: 1, ml: 'auto' }}
-                                        onClick={() => {
-                                            handleReset();
-                                            setRoundCount(roundCount + 1);
-                                        }}
+                                        onClick={handleReset}
                                     >
-                                        Next round
+                                        {roundCount === 4
+                                            ? 'Complete Battle'
+                                            : 'Next Round'}
                                     </Button>
                                 </div>
-                            </>
-                        ) : (
-                            <>
-                                <Typography variant='h6'>
-                                    BATTLE COMPLETE
-                                </Typography>
-                                <Typography>
-                                    {player1Vp === player2Vp
-                                        ? 'The game is a TIE! 🫱🏿‍🫲🏽'
-                                        : `WINNER: ${
-                                              player1Vp > player2Vp
-                                                  ? 'PLAYER 1 💪'
-                                                  : 'PLAYER 2 💪'
-                                          }`}
-                                </Typography>
                             </>
                         )}
                     </Paper>

@@ -114,6 +114,8 @@ function Setup() {
     const handleReset = () => {
         setActiveStep(0);
     };
+    // add form to add faction to player 1 and player 2
+    // player context?
 
     return (
         <>
