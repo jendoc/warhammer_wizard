@@ -154,7 +154,7 @@ function Battle() {
                         attacker during the setup phase) will take the first
                         turn.
                     </Typography>
-                    <FormControl fullWidth>
+                    {/* <FormControl fullWidth>
                         <InputLabel id='active-player-label'>
                             Active Player
                         </InputLabel>
@@ -167,8 +167,7 @@ function Battle() {
                             <MenuItem value={1}>Player 1</MenuItem>
                             <MenuItem value={2}>Player 2</MenuItem>
                         </Select>
-                    </FormControl>
-                    <Divider></Divider>
+                    </FormControl> */}
                     <Typography component='div'>
                         2. <strong> Determine the Underdog.</strong> Whichever
                         player has the fewest victory points is the underdog for
