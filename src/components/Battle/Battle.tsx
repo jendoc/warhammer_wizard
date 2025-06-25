@@ -86,7 +86,6 @@ function Battle() {
                         turn in the previous battle round decides who will take
                         the first turn in the current battle round.
                     </Typography>
-                    <Divider></Divider>
 
                     <Paper
                         elevation={2}
