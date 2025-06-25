@@ -22,7 +22,7 @@ function MainMenu() {
                         color: '#1D263C',
                     }}
                 >
-                    <Link to='/setup'>⚔️ Start Battle</Link>
+                    <Link to='/setup' style={{textDecoration: 'none', color: '#fff'}}>⚔️ Start Battle</Link>
                 </Button>
                 {/* <Button
                     className='battle__button'

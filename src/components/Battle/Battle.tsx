@@ -9,7 +9,6 @@ import {
     Paper,
     Tooltip,
 } from '@mui/material';
-import { Link } from 'react-router';
 import InfoOutlineIcon from '@mui/icons-material/InfoOutline';
 import './Battle.css';
 import React, { useRef } from 'react';
