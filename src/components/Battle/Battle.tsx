@@ -8,11 +8,6 @@ import {
     Typography,
     Paper,
     Tooltip,
-    Divider,
-    Select,
-    InputLabel,
-    FormControl,
-    MenuItem,
 } from '@mui/material';
 import { Link } from 'react-router';
 import InfoOutlineIcon from '@mui/icons-material/InfoOutline';
@@ -23,7 +18,7 @@ import Actions from '../Actions/Actions';
 function Battle() {
     const [battleComplete, setBattleComplete] = React.useState(false);
     const [activeStep, setActiveStep] = React.useState(0);
-    const [activePlayer, setActivePlayer] = React.useState(0);
+    // const [activePlayer, setActivePlayer] = React.useState(0);
     const [roundCount, setRoundCount] = React.useState(1);
     const [player1Vp, setPlayer1Vp] = React.useState(0);
     const [player2Vp, setPlayer2Vp] = React.useState(0);
@@ -67,11 +62,10 @@ function Battle() {
         }
     };
 
-    const handlePlayerChange = (evt) => {
-        setActivePlayer(evt.target.value as number);
-    };
+    // const handlePlayerChange = (evt) => {
+    //     setActivePlayer(evt.target.value as number);
+    // };
 
-    console.log(activePlayer);
     const steps = [
         {
             label: 'Start of Turn',
@@ -324,7 +318,7 @@ function Battle() {
         },
     ];
 
-    const scrollToRef = useRef(null);
+    const scrollToRef = useRef<HTMLDivElement>(null);
 
     return (
         <div className='battle'>
@@ -346,7 +340,6 @@ function Battle() {
                         Player 2 VP: {player2Vp} {getUnderdogEmoji(2)}
                     </p>
                 </Box>
-                <Link to='/'> Return Home</Link>
                 <Stepper activeStep={activeStep} orientation='vertical'>
                     {steps.map((step, index) => (
                         <Step key={step.label}>
@@ -362,9 +355,11 @@ function Battle() {
                                     ></Typography>
                                 )}
                                 <Button
-                                    onClick={() =>
-                                        scrollToRef?.current.scrollIntoView()
-                                    }
+                                    onClick={() => {
+                                        if (scrollToRef.current) {
+                                            scrollToRef.current.scrollIntoView();
+                                        }
+                                    }}
                                 >
                                     See abilites
                                 </Button>

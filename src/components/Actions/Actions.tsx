@@ -19,7 +19,16 @@ interface Action {
 }
 
 function Actions({ phase }: { phase: number }) {
-    const phaseMap: Record<number, { name: string; color: string }> = {
+    type PhaseName =
+        | 'start'
+        | 'hero'
+        | 'movement'
+        | 'shooting'
+        | 'charge'
+        | 'combat'
+        | 'end';
+
+    const phaseMap: Record<number, { name: PhaseName; color: string }> = {
         0: { name: 'start', color: '#040100' },
         1: { name: 'hero', color: '#A39048' },
         2: { name: 'movement', color: '#808080' },

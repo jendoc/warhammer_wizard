@@ -169,7 +169,6 @@ function Setup() {
                         </Button>
                     </Paper>
                 )}{' '}
-                <Link to='/'> Return Home</Link>
             </Box>
         </>
     );
