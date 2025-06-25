@@ -8,6 +8,11 @@ import {
     Typography,
     Paper,
     Tooltip,
+    Divider,
+    Select,
+    InputLabel,
+    FormControl,
+    MenuItem,
 } from '@mui/material';
 import { Link } from 'react-router';
 import InfoOutlineIcon from '@mui/icons-material/InfoOutline';
@@ -18,14 +23,17 @@ import Actions from '../Actions/Actions';
 function Battle() {
     const [battleComplete, setBattleComplete] = React.useState(false);
     const [activeStep, setActiveStep] = React.useState(0);
+    const [activePlayer, setActivePlayer] = React.useState(0);
     const [roundCount, setRoundCount] = React.useState(1);
     const [player1Vp, setPlayer1Vp] = React.useState(0);
     const [player2Vp, setPlayer2Vp] = React.useState(0);
+
     const getUnderdogMessage = (vp1: number, vp2: number) => {
         if (vp1 < vp2) return 'Underdog: Player 1';
         if (vp2 < vp1) return 'Underdog: Player 2';
         return 'No underdog — the players are tied.';
     };
+
     const getUnderdogEmoji = (player: 1 | 2) => {
         if (player1Vp === player2Vp) return null; // No underdog
 
@@ -59,6 +67,11 @@ function Battle() {
         }
     };
 
+    const handlePlayerChange = (evt) => {
+        setActivePlayer(evt.target.value as number);
+    };
+
+    console.log(activePlayer);
     const steps = [
         {
             label: 'Start of Turn',
@@ -73,6 +86,7 @@ function Battle() {
                         turn in the previous battle round decides who will take
                         the first turn in the current battle round.
                     </Typography>
+                    <Divider></Divider>
 
                     <Paper
                         elevation={2}
@@ -97,7 +111,7 @@ function Battle() {
 
                     <Typography component='div'>
                         2. <strong> Determine the Underdog.</strong> Whichever
-                        player has the fewest victory points it the underdog for
+                        player has the fewest victory points is the underdog for
                         the battle round. If the players are tied, there is no
                         underdog.
                         <Paper
@@ -118,11 +132,17 @@ function Battle() {
                             />{' '}
                             {getUnderdogMessage(player1Vp, player2Vp)}
                         </Paper>
+                        Each player gets 4 COMMAND POINTS to spend this round.
+                        The underdog gets an additional point.
                     </Typography>
 
                     <Typography component='div'>
-                        2. <strong> Start of Turn Abilites</strong> The active
+                        3. <strong> Start of Turn Abilites</strong> The active
                         player can use a Start of Turn ability.
+                    </Typography>
+                    <Typography component='div'>
+                        4. <strong> Choose Battle Tactic</strong> Can't be done
+                        if player chose to take a double turn.
                     </Typography>
                 </>
             ),
@@ -134,9 +154,24 @@ function Battle() {
                         attacker during the setup phase) will take the first
                         turn.
                     </Typography>
+                    <FormControl fullWidth>
+                        <InputLabel id='active-player-label'>
+                            Active Player
+                        </InputLabel>
+                        <Select
+                            labelId='active-player-label'
+                            value={activePlayer}
+                            label='Active Player'
+                            onChange={handlePlayerChange}
+                        >
+                            <MenuItem value={1}>Player 1</MenuItem>
+                            <MenuItem value={2}>Player 2</MenuItem>
+                        </Select>
+                    </FormControl>
+                    <Divider></Divider>
                     <Typography component='div'>
                         2. <strong> Determine the Underdog.</strong> Whichever
-                        player has the fewest victory points it the underdog for
+                        player has the fewest victory points is the underdog for
                         the battle round. If the players are tied{' '}
                         <i>(as they are now in the first round)</i>, there is no
                         underdog.
@@ -158,23 +193,31 @@ function Battle() {
                             />{' '}
                             {getUnderdogMessage(player1Vp, player2Vp)}
                         </Paper>
+                        Each player gets 4 COMMAND POINTS to spend this round.
+                        The underdog gets an additional point.
                     </Typography>
                     <Typography component='div'>
-                        3. <strong> Start of Turn Abilites</strong> The active
-                        player can use a Start of Turn ability.
+                        3. <strong> Start of Turn Abilites</strong> Activate any
+                        start of turn abilities.
                     </Typography>
                 </>
             ),
         },
         {
             label: 'Hero Phase',
-            description: <>The active player performs 1 HERO ability.</>,
+            description: (
+                <>
+                    Each player may perform 1 HERO ability, starting with the
+                    active player.
+                </>
+            ),
         },
         {
             label: 'Movement Phase',
             description: (
                 <>
-                    The active player performs 1 MOVE ability.
+                    Each player may perform 1 MOVEMENT ability, starting with
+                    the active player.
                     <Paper
                         elevation={2}
                         sx={{
@@ -201,26 +244,37 @@ function Battle() {
             label: 'Shooting Phase',
             description: (
                 <>
-                    The active player performs 1 SHOOTING ability. The
-                    non-active player may only counter.
+                    The active player performs 1 SHOOTING ability.
+                    <Paper
+                        elevation={2}
+                        sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            columnGap: '5px',
+                            fontSize: '10px',
+                            padding: '5px',
+                            margin: '5px',
+                            maxWidth: 'fit-content',
+                            backgroundColor: '#F8D882cc',
+                        }}
+                    >
+                        <InfoOutlineIcon
+                            style={{ height: '10px', width: '10px' }}
+                        />{' '}
+                        Champions get +1 to shooting attacks.
+                    </Paper>
                 </>
             ),
         },
         {
             label: 'Charge Phase',
-            description: (
-                <>
-                    The active player performs 1 CHARGE ability. The non-active
-                    player may only counter.
-                </>
-            ),
+            description: <>The active player performs 1 CHARGE ability.</>,
         },
         {
             label: 'Combat Phase',
             description: (
                 <>
-                    The active player performs 1 COMBAT ability. The non-active
-                    player may only counter.{' '}
+                    The active player performs 1 COMBAT ability.{' '}
                     <Paper
                         elevation={2}
                         sx={{
@@ -240,13 +294,34 @@ function Battle() {
                         Units are considered to be in combat range if they are
                         within 3" of eachother.
                     </Paper>
+                    <Paper
+                        elevation={2}
+                        sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            columnGap: '5px',
+                            fontSize: '10px',
+                            padding: '5px',
+                            margin: '5px',
+                            maxWidth: 'fit-content',
+                            backgroundColor: '#F8D882cc',
+                        }}
+                    >
+                        <InfoOutlineIcon
+                            style={{ height: '10px', width: '10px' }}
+                        />{' '}
+                        Champions get +1 to weapon attacks.
+                    </Paper>
                 </>
             ),
         },
         {
             label: 'End of Turn',
             description: (
-                <>The active player may perform an END OF TURN ability.</>
+                <>
+                    The active player may perform an END OF TURN ability. Check
+                    for Objective Control: Who has the most 'Bravery'
+                </>
             ),
         },
     ];

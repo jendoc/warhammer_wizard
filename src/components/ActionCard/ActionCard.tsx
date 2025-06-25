@@ -15,7 +15,7 @@ function ActionCard({
     title,
     icon,
     children,
-    headerColor
+    headerColor,
 }: {
     phase: string;
     title: string;
@@ -33,14 +33,18 @@ function ActionCard({
                     title={phase}
                     avatar={icon}
                     action={
-                        <IconButton aria-label='expand' size='small' sx={{color: '#fff'}}>
+                        <IconButton
+                            aria-label='expand'
+                            size='small'
+                            sx={{ color: '#fff' }}
+                        >
                             {open ? <KeyboardArrowUp /> : <KeyboardArrowDown />}
                         </IconButton>
                     }
                     sx={{ backgroundColor: headerColor, color: '#fff' }}
                 ></CardHeader>
                 <CardContent>
-                    <Typography variant="subtitle2">{title}</Typography>
+                    <Typography variant='subtitle2'>{title}</Typography>
                     <Collapse in={open}>
                         <Box>{children}</Box>
                     </Collapse>

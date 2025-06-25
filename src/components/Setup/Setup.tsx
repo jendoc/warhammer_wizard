@@ -88,8 +88,8 @@ const steps = [
                 <p>
                     Shuffle the twist deck that corresponds to the side of the
                     battlefield the players are fighting on and place it face
-                    down next to the battlefield <i>(the other twist deck is not
-                    used).</i>
+                    down next to the battlefield{' '}
+                    <i>(the other twist deck is not used).</i>
                 </p>
                 <p>
                     Each player takes one battle tactic deck, shuffles it, and

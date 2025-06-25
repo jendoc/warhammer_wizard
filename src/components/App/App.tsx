@@ -6,9 +6,7 @@ import Battle from '../Battle/Battle';
 import Setup from '../Setup/Setup';
 import { Route, Routes } from 'react-router';
 
-
 function App() {
-
     return (
         <>
             <NavBar />
