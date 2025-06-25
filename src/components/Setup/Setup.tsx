@@ -119,7 +119,14 @@ function Setup() {
 
     return (
         <>
-            <Box style={{ backgroundColor: '#fff', padding: '10px' }}>
+            <Box
+                style={{
+                    backgroundColor: '#ffffffe6',
+                    padding: '10px',
+                    borderRadius: '10px',
+                    margin: '0 10px',
+                }}
+            >
                 <Typography variant='h6'>🔥 FIRE AND JADE SETUP 🐲</Typography>
                 <Stepper activeStep={activeStep} orientation='vertical'>
                     {steps.map((step, index) => (
